@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<!-- icon -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+body{
+  font-family: 'Barlow', sans-serif;
+}
+a:hover{
+  text-decoration: none;
+}
+.border-left{
+  border-left: 2px solid var(--primary) !important;
+}
+.sidebar{
+  top: 0;
+  left : 0;
+  z-index : 100;
+  overflow-y: auto;
+}
+.overlay{
+  background-color: rgb(0 0 0 / 45%);
+  z-index: 99;
+}
+.dropdown-toggle{
+    position: relative;
+}
+#user_logo{
+    font-size: 40px;
+    position: absolute;
+    right: 11px;
+    bottom: -7px;
+    cursor: pointer;
+}
+#file_up {
+    position: relative;
+    left: 350px;
+    top: 25px;
+    cursor: pointer;
+              }
+
+#user_dropdown{
+    font-size: 20px;
+    position: relative;
+    right: 20px;
+}
+.btn {
+        position: relative;
+    left: 600px;
+    top: 50px;
+      }
+/* sidebar for small screens */
+@media screen and (max-width: 767px){
+  .sidebar{
+    max-width: 18rem;
+    transform : translateX(-100%);
+    transition : transform 0.4s ease-out;
+  }
+  .sidebar.active{
+    transform : translateX(0);
+  }
+}
+</style>
+  <body>
+    <!-- overlay -->
+<div id="sidebar-overlay" class="overlay w-100 vh-100 position-fixed d-none"></div>
+<!-- sidebar -->
+<div class="col-md-3 col-lg-2 px-0 position-fixed h-100 bg-white shadow-sm sidebar" id="sidebar">
+  <h1 class="text-primary d-flex my-4 justify-content-center"> HR Admin </h1>
+    <div class="list-group rounded-0">
+        {% for menu in menus %}
+        {% if menu[1] == request.path %}
+        <a class="list-group-item list-group-item-action border-0 d-flex align-items-center active"
+           href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% else %}
+        <a class="list-group-item list-group-item-action  border-0 d-flex align-items-center" href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="col-md-9 col-lg-10 ml-md-auto px-0 ms-md-auto">
+  <!-- top nav -->
+  <nav class="w-100 d-flex px-4 py-2 mb-4 shadow-sm">
+    <!-- close sidebar -->
+    <button class="btn py-0 d-lg-none" id="open-sidebar">
+      <span class="bi bi-list text-primary h3"></span>
+    </button>
+    <div class="dropdown ml-auto">
+        <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
+            <span class="dropdown-toggle"  data-bs-toggle="dropdown" id="user_dropdown">
+            <span class="material-symbols-outlined" id="user_logo">
+                account_circle
+                </span>
+            </span>
+        <!-- </button> -->
+        <ul class="dropdown-menu dropdown-menu-dark">
+          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="#">Switch role</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </div>
+  </nav>
+  <!-- switchrole dialogue box -->
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Switch the role</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <h3>
+                Choose your roles:
+            </h3>
+        </div>
+            <!-- For Loop Place -->
+                <div class="row mt-3">
+
+            <div class="col-md-4">
+                <a href="/test"> <button class="btn btn-primary"> HR Admin </button> </a>
+            </div>
+            <div class="col-md-4">
+                <a href="/company_master/user"><button class="btn btn-primary"> Company Admin </button></a>
+            </div>
+            <div class="col-md-4">
+                <a href="/employee"> <button class="btn btn-primary"> Employee </button> </a>
+            </div>
+        </div>
+            <!-- For Loop will close here -->
+        </div>
+    </div>
+</div>
+      </div>
+    </div>
+  <!-- seitchrole dialogue box end -->
+  <!-- main content -->
+  <main class="p-4 min-vh-100">
+
+    <div class="container mt-5 pt-5">
+        {%with messages = get_flashed_messages()%}
+    {%if messages%}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <button aria-label="close" class="btn-close" data-bs-dismiss="alert" id="cls_btn" type="button">
+            <span aria-hidden="true"></span>
+        </button>
+        {{message}}
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+    <form action="/payslip/upload" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <input type="file" name="file" id="file_up">
+      <br>
+      <button type="submit" class="btn btn-success" name="button"> Upload </button>
+    </form>
+    </div>
+  </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script>
+        function validateForm() {
+            var fileInput = document.getElementById('file_up');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.csv)$/i;
+
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Please upload file having extensions .csv only.');
+                fileInput.value = '';
+                return false;
+            }
+
+            // You can perform additional validation here if needed
+
+            return true; // Allow form submission
+        }
+
+
+
+$(document).ready(()=>{
+  $('#open-sidebar').click(()=>{
+      // add class active on #sidebar
+      $('#sidebar').addClass('active');
+      // show sidebar overlay
+      $('#sidebar-overlay').removeClass('d-none');
+   });
+   $('#sidebar-overlay').click(function(){
+      // add class active on #sidebar
+      $('#sidebar').removeClass('active');
+      // show sidebar overlay
+      $(this).addClass('d-none');
+   });
+});</script>
+</body>
+</html>

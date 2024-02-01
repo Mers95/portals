@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Bootstrap demo</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" rel="stylesheet">
+    <!-- icon -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          rel="stylesheet"/>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+body{
+  font-family: 'Barlow', sans-serif;
+}
+a:hover{
+  text-decoration: none;
+}
+.border-left{
+  border-left: 2px solid var(--primary) !important;
+}
+.sidebar{
+  top: 0;
+  left : 0;
+  z-index : 100;
+  overflow-y: auto;
+}
+.overlay{
+  background-color: rgb(0 0 0 / 45%);
+  z-index: 99;
+}
+.dropdown-toggle{
+    position: relative;
+}
+#user_logo{
+    font-size: 40px;
+    position: absolute;
+    right: 11px;
+    bottom: -7px;
+    cursor: pointer;
+}
+#user_dropdown{
+    font-size: 20px;
+    position: relative;
+    right: 20px;
+}
+/* sidebar for small screens */
+@media screen and (max-width: 767px){
+  .sidebar{
+    max-width: 18rem;
+    transform : translateX(-100%);
+    transition : transform 0.4s ease-out;
+  }
+  .sidebar.active{
+    transform : translateX(0);
+  }
+}
+.dv {
+   position: relative;
+   left : 41vh;
+   }
+
+
+
+</style>
+<body>
+<!-- overlay -->
+<div class="overlay w-100 vh-100 position-fixed d-none" id="sidebar-overlay"></div>
+<!-- sidebar -->
+<div class="col-md-3 col-lg-2 px-0 position-fixed h-100 bg-white shadow-sm sidebar" id="sidebar">
+    <h1 class="text-primary d-flex my-4 justify-content-center"> HR Admin </h1>
+<!--    <div class="list-group rounded-0">-->
+<!--        <a class="list-group-item list-group-item-action border-0 d-flex align-items-center" href="/hrms/home">-->
+<!--            <span class="bi bi-border-all"></span>-->
+<!--            <span class="ml-2"> Employees </span>-->
+<!--        </a>-->
+<!--        <a class="list-group-item list-group-item-action active border-0 d-flex align-items-center"-->
+<!--           href="/hrms/recruit">-->
+<!--            <span class="bi bi-border-all"></span>-->
+<!--            <span class="ml-2"> Recruitment </span>-->
+<!--        </a>-->
+<!--        <a class="list-group-item list-group-item-action border-0 align-items-center" href="#">-->
+<!--            <span class="bi bi-box"></span>-->
+<!--            <span class="ml-2"> Hierarchy </span>-->
+<!--        </a>-->
+<!--        <a class="list-group-item list-group-item-action border-0 align-items-center" href="#">-->
+<!--            <span class="bi bi-box"></span>-->
+<!--            <span class="ml-2"> Employee Attendance </span>-->
+<!--        </a>-->
+<!--        <a class="list-group-item list-group-item-action border-0 align-items-center" href="#">-->
+<!--            <span class="bi bi-box"></span>-->
+<!--            <span class="ml-2"> Year Calender </span>-->
+<!--        </a>-->
+<!--        <a class="list-group-item list-group-item-action border-0 align-items-center" href="#">-->
+<!--            <span class="bi bi-box"></span>-->
+<!--            <span class="ml-2"> Company Policies </span>-->
+<!--        </a>-->
+
+<!--    </div>-->
+    <div class="list-group rounded-0">
+        {% for menu in menus %}
+        {% if menu[1] == request.path %}
+        <a class="list-group-item list-group-item-action border-0 d-flex align-items-center active"
+           href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% else %}
+        <a class="list-group-item list-group-item-action  border-0 d-flex align-items-center" href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="col-md-9 col-lg-10 ml-md-auto px-0 ms-md-auto">
+    <!-- top nav -->
+    <nav class="w-100 d-flex px-4 py-2 mb-4 shadow-sm">
+        <!-- close sidebar -->
+        <button class="btn py-0 d-lg-none" id="open-sidebar">
+            <span class="bi bi-list text-primary h3"></span>
+        </button>
+        <div class="dropdown ml-auto">
+            <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
+            <span class="dropdown-toggle" data-bs-toggle="dropdown" id="user_dropdown">
+            <span class="material-symbols-outlined" id="user_logo">
+                account_circle
+                </span>
+            </span>
+            <!-- </button> -->
+            <ul class="dropdown-menu dropdown-menu-dark">
+                <li><a class="dropdown-item" data-bs-target="#staticBackdrop" data-bs-toggle="modal" href="#">Switch
+                    role</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- switchrole dialogue box -->
+    <!-- Modal -->
+    <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         id="staticBackdrop" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Switch the role</h1>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <h3>
+                            Choose your roles:
+                        </h3>
+                    </div>
+                    <!-- For Loop Place -->
+                    <div class="row mt-3">
+
+                        <div class="col-md-4">
+                            <a href="/test">
+                                <button class="btn btn-primary"> HR Admin</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/company_master/user">
+                                <button class="btn btn-primary"> Company Admin</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/employee">
+                                <button class="btn btn-primary"> Employee</button>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- For Loop will close here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- seitchrole dialogue box end -->
+<!-- User_creation_Modal -->
+
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false" id="docverification"
+     tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                {%with messages = get_flashed_messages()%}
+                {%if messages%}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    <button aria-label="close" class="btn-close" data-bs-dismiss="alert" id="cls_btn" type="button">
+                        <span aria-hidden="true"></span>
+                    </button>
+                    {{message}}
+                </div>
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Document Verification </h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/hrms/recruitment/doc_verification" autocomplete="off" method="post">
+                    <div class="mb-3">
+                        <label class="col-form-label" for="i_name"> Joinee Name </label>
+                        <input class="form-control" id="i_name" name="i_name" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="email-id"> Email_Address </label>
+                        <input class="form-control" id="email-id" name="email" type="text">
+                    </div>
+                    <div class="mb-3 pt-2">
+                        <label class="col-form-label" for="company">Company_Name </label>
+                        <select id="company" name="company" required>
+                            <option value="#"> -- Select Company --</option>
+                            <option value="Highbrow Interactive"> Highbrow Interactive</option>
+                            <option value="Medisim Vr"> Medisim Vr</option>
+
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="emp_category"> Employee_Category </label>
+                        <select id="emp_category" name="emp_category" required>
+                            <option value="#"> -- Select Category --</option>
+                            <option value="Fresher"> Fresher</option>
+                            <option value="Experience"> Experience</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="col-form-label" for="dept"> Department </label>
+                        <select id="dept" name="dept" required>
+                            <option value="#"> -- Select Department --</option>
+                            {% for departments in departments %}
+                            <option value="{{ departments }}"> {{ departments }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3" id="rolesDiv">
+                        <label class="col-form-label" for="roles"> Roles </label>
+                        <select id="roles" name="roles">
+                            <option value="#"> -- Select Roles --</option>
+
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary float-end" type="submit"> Send Mail</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- User Creation Modal End -->
+<!-- main content -->
+<main class="p-4 min-vh-100">
+    <div class="container">
+    {%with messages = get_flashed_messages()%}
+                {%if messages%}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    <button aria-label="close" class="btn-close" data-bs-dismiss="alert" id="cls_btn" type="button">
+                        <span aria-hidden="true"></span>
+                    </button>
+                    {{message}}
+                </div>
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
+    <button class="btn btn-primary dv" data-bs-target="#docverification" data-bs-toggle="modal" type="button">
+        Document Verification
+    </button>
+    </div>
+</main>
+<script crossorigin="anonymous"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#dept').on('change', function(){
+            var selectedDepartment = $(this).val();
+            console.log(selectedDepartment);
+            $.ajax({
+                type: 'POST',
+                url: '/get_roles_options', // Replace this with the appropriate endpoint in your Flask app
+                data: {'selected_department': selectedDepartment},
+
+                success: function(response){
+                    var rolesDropdown = $('#roles');
+                    rolesDropdown.empty();
+                    rolesDropdown.append($('<option selected="selected"></option>').text('-- Select Role --'));
+                    for (var i = 0; i < response.roles.length; i++){
+                        rolesDropdown.append($('<option></option>').attr('value', response.roles[i]).text(response.roles[i]));
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+
+
+
+
+
+
+$(document).ready(()=>{
+  $('#open-sidebar').click(()=>{
+      // add class active on #sidebar
+      $('#sidebar').addClass('active');
+      // show sidebar overlay
+      $('#sidebar-overlay').removeClass('d-none');
+   });
+   $('#sidebar-overlay').click(function(){
+      // add class active on #sidebar
+      $('#sidebar').removeClass('active');
+      // show sidebar overlay
+      $(this).addClass('d-none');
+   });
+});
+
+
+</script>
+</body>
+</html>

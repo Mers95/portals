@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Bootstrap demo</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet">
+</head>
+<style>
+       .card::-webkit-scrollbar {
+  width: 0px;
+}
+.card::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+/* Handle */
+.card::-webkit-scrollbar-thumb {
+  background: #8B8689;
+  border-radius: 10px;
+}
+/* Handle on hover */
+.card::-webkit-scrollbar-thumb:hover {
+  background: #C4C1C1;
+}
+    .card{
+        height: 90vh;
+        overflow-y: auto;
+        /* background: #1fcfa8c9; */
+        border-radius: 16px;
+    box-shadow: rgb(0 0 0 / 20%) 0px 8px 24px;
+    }
+    #header1{
+        background: #0049B7;
+    color: #fff;
+    }
+    #body1{
+        background: #00DDFF;
+    }
+    .label1{
+        color: #493636;
+    }
+    .input1{
+        background: #DFDFDF;
+        border: none;
+    }
+    .label2{
+        color: #493636;
+    }
+    .input2{
+        background: #DFDFDF;
+        border: none;
+    }
+    textarea{
+        width: 330px;
+    height: 80px;
+    border: none;
+    background: #DFDFDF;
+    border-radius: 10px;
+    border-bottom: solid 1.5px #E1E1E1;
+    }
+    textarea:focus{
+        outline: none;
+        background-color: #fff;
+    }
+    .blink {
+        animation: blinker 2s linear infinite;
+        color: red;
+        font-size: 20px;
+        font-weight: 600;
+
+
+    }
+    @keyframes blinker {
+        50% {
+            opacity: 0.5;
+
+
+
+        }
+    }
+
+
+
+</style>
+<body>
+<div class="container mt-5 mb-5">
+    {%with messages = get_flashed_messages()%}
+    {%if messages%}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <button aria-label="close" class="btn-close" data-bs-dismiss="alert" id="cls_btn" type="button">
+            <span aria-hidden="true"></span>
+        </button>
+        {{message}}
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-7">
+            <div class="card">
+                <div>
+                    <form action="/hrms/recruitment/onboarding" autocomplete="off" enctype="multipart/form-data"
+                          method="post">
+                        <div>
+                            <div class="card-header" id="header1">
+                                <h2 class="text-center">Personal details</h2>
+                            </div>
+                            <div class="card-body" id="body1">
+                                {% for onb_details in onb_details %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label label1" for="validationCustom01">Your name <span
+                                                style="color: red;"> (Same as your Official Documents) </span></label>
+                                        <input class="form-control input1" id="validationCustom01" name="name"
+                                               required type="text">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label label1" for="validationCustom02">Email:</label>
+                                        <input class="form-control input1" id="validationCustom02" name="email"
+                                               required type="email">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom03">Mobile number:</label>
+                                        <input class="form-control input1" id="validationCustom03" name="mobile"
+                                               required type="number">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom15">Alternate Mobile
+                                            number:</label>
+                                        <input class="form-control input1" id="validationCustom15" name="alt_mobile"
+                                               required type="number">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom14">Company:</label>
+                                        <input class="form-control input1" id="validationCustom14" name="company"
+                                               readonly type="text" value="{{ onb_details[4] }}">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom04">Working email:</label>
+                                        <input class="form-control input1" id="validationCustom04" name="workmail"
+                                               required type="email">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom16">Department:</label>
+                                        <input class="form-control input1" id="validationCustom16" name="dept"
+                                               readonly type="text" value="{{ onb_details[6] }}">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom17">Role:</label>
+                                        <input class="form-control input1" id="validationCustom17" name="role"
+                                               readonly type="text" value="{{ onb_details[7] }}">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom05">Date of birth:</label>
+                                        <input class="form-control input1" id="validationCustom05" name="dob"
+                                               required type="date">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom06">Blood group:</label>
+                                        <select id="validationCustom06" class="form-control input1" name="blood" required>
+                                            <option value="#"> -- Select Blood Group --</option>
+                                            {% for bgs in bgs %}
+                                            <option value="{{ bgs }}"> {{ bgs }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom07">Emergency contact
+                                            person name:</label>
+                                        <input class="form-control input1" id="validationCustom07"
+                                               name="emergencyPerson"
+                                               required type="text">
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom08">Emergency contact
+                                            person mobile:</label>
+                                        <input class="form-control input1" id="validationCustom08"
+                                               name="emergencypersonContact"
+                                               required type="number">
+                                    </div>
+                                    <div class="col-md-10 mt-3">
+                                        <label class="form-label label1" for="validationCustom08">Marital
+                                            status:</label>
+                                        <div class="form-check form-check-inline mx-3">
+                                            <input class="form-check-input" id="flexRadioDefault1"
+                                                   name="flexRadioDefault"
+                                                   type="radio" value="unmarried">
+                                            <label class="form-check-label label1" for="flexRadioDefault1">
+                                                Unmarried
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline mx-3">
+                                            <input class="form-check-input" id="flexRadioDefault2"
+                                                   name="flexRadioDefault"
+                                                   type="radio" value="married">
+                                            <label class="form-check-label label1" for="flexRadioDefault2">
+                                                Married
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 mt-3">
+                                        <label class="form-label label1" for="validationCustom08"> Gender:</label>
+                                        <div class="form-check form-check-inline mx-3">
+                                            <input class="form-check-input" id="flexRadioDefault11"
+                                                   name="flexRadioDefault1"
+                                                   type="radio" value="Male">
+                                            <label class="form-check-label label1" for="flexRadioDefault1">
+                                                Male
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline mx-3">
+                                            <input class="form-check-input" id="flexRadioDefault12"
+                                                   name="flexRadioDefault1"
+                                                   type="radio" value="Female">
+                                            <label class="form-check-label label1" for="flexRadioDefault2">
+                                                Female
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline mx-3">
+                                            <input class="form-check-input" id="flexRadioDefault13"
+                                                   name="flexRadioDefault1"
+                                                   type="radio" value="Others">
+                                            <label class="form-check-label label1" for="flexRadioDefault2">
+                                                Others
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom09">Current
+                                            address:</label>
+                                        <textarea cols="30" id="validationCustom09" name="currentAddress"
+                                                  rows="10"></textarea>
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <label class="form-label label1" for="validationCustom10">Permanent
+                                            address:</label>
+                                        <textarea cols="30" id="validationCustom10" name="permanentAddress"
+                                                  rows="10"></textarea>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div>
+                            <div class="card-header" id="header1">
+                                <h2 class="text-center">Upload files</h2>
+                            </div>
+                            <div class="card-body" id="body1">
+                                <div class="row">
+                                    <div class="col-md-4 mt-4">
+                                        <div class="">
+                                            <h5>Education details</h5>
+                                        </div>
+                                        {% for upload_com_docs in upload_com_docs %}
+                                        <div class="mt-3">
+                                            <span id="error-message"></span>
+                                            <label class="form-label label2" for="diploma_{{ loop.index }}">{{
+                                                upload_com_docs }}</label>
+                                            <input class="form-control input2" id="diploma_{{ loop.index }}"
+                                                   name="12thDiplomaMark"
+                                                   onchange="validateFileExtensionModal('diploma_{{ loop.index }}')"
+                                                   required type="file">
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="col-md-4 mt-4">
+                                        <div class="">
+                                            <h5>Personal details</h5>
+                                        </div>
+                                        <div class="mt-3">
+
+                                            <label class="form-label label2" for="Aadhaar">Aadhaar/Voter id:</label>
+                                            <input class="form-control input2" id="Aadhaar" name="12thDiplomaMark"
+                                                   onchange="validateFileExtensionModal('Aadhaar')"
+                                                   required type="file">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mt-4">
+                                        <div class="">
+                                            <h5>Experience details.</h5>
+                                        </div>
+                                        {% if upload_exp_docs %}
+                                        {%for upload_exp_docs in upload_exp_docs %}
+                                        <div class="mt-3">
+                                            <label class="form-label label2" for="offerletter_{{ loop.index }}">{{
+                                                upload_exp_docs
+                                                }}</label>
+                                            <input class="form-control input2" id="offerletter_{{ loop.index }}"
+                                                   name="12thDiplomaMark"
+                                                   onchange="validateFileExtensionModal('offerletter_{{ loop.index }}')"
+                                                   required type="file">
+                                        </div>
+                                        {% endfor %}
+                                        {% else %}
+                                        <p class="blink"> No documents to be upload</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <div aria-hidden="true" aria-labelledby="filePreviewModalLabel" class="modal fade"
+                                         id="filePreviewModal" tabindex="-1">
+                                        <div class="modal-dialog modal-xl">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="filePreviewModalLabel">File Preview</h5>
+                                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <embed height="600px" id="pdfPreviewModal" type="application/pdf"
+                                                           width="100%"></embed>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" data-bs-dismiss="modal"
+                                                            type="button">OK
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mt-3">
+                                    <div class="">
+                                        <button class="btn btn-primary float-end " type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script crossorigin="anonymous"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function previewFileModal(inputId) {
+        const file = document.getElementById(inputId).files[0];
+        const pdfPreviewModal = document.getElementById('pdfPreviewModal');
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                pdfPreviewModal.setAttribute('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+            var myModal = new bootstrap.Modal(document.getElementById('filePreviewModal'));
+            myModal.show();
+        } else {
+            pdfPreviewModal.removeAttribute('src');
+        }
+    }
+
+    function closeDialogModal() {
+        var myModal = new bootstrap.Modal(document.getElementById('filePreviewModal'));
+        myModal.hide();
+    }
+
+    function validateFileExtensionModal(inputId) {
+        const fileInput = document.getElementById(inputId);
+        const filePath = fileInput.value;
+        const allowedExtensions = /(\.pdf)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload a file in PDF format.');
+            fileInput.value = '';
+            return false;
+        } else {
+            previewFileModal(inputId);
+        }
+    }
+
+</script>
+
+
+</body>
+</html>

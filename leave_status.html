@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Leave Status</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" rel="stylesheet">
+    <!-- icon -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          rel="stylesheet"/>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Barlow&display=swap');
+body{
+  font-family: 'Barlow', sans-serif;
+}
+a:hover{
+  text-decoration: none;
+}
+.border-left{
+  border-left: 2px solid var(--primary) !important;
+}
+.sidebar{
+  top: 0;
+  left : 0;
+  z-index : 100;
+  overflow-y: auto;
+}
+.overlay{
+  background-color: rgb(0 0 0 / 45%);
+  z-index: 99;
+}
+.dropdown-toggle{
+    position: relative;
+}
+#user_logo{
+    font-size: 40px;
+    position: absolute;
+    right: 11px;
+    bottom: -7px;
+    cursor: pointer;
+}
+#user_dropdown{
+    font-size: 20px;
+    position: relative;
+    right: 20px;
+}
+
+
+
+
+/* sidebar for small screens */
+@media screen and (max-width: 767px){
+  .sidebar{
+    max-width: 18rem;
+    transform : translateX(-100%);
+    transition : transform 0.4s ease-out;
+  }
+  .sidebar.active{
+    transform : translateX(0);
+  }
+}
+
+.label-column , .input-column {
+border-bottom: 1.5px solid #D3D3D3;
+transition : 0.8s;
+cursor : pointer;
+
+}
+.label-column:hover + .input-column {
+    border-bottom: 1.5px solid #007bff;
+    transition : 0.8s;
+}
+.employeeInput{
+border:none;
+}
+.input-column{
+padding : 0px;
+margin : 0px;
+}
+.employeeInput:focus{
+    border-bottom: .2px solid #007bff;
+    transition : 0.8s;
+    outline: none;
+    box-shadow:none;
+    width : 100%;
+    border-radius:0px;
+}
+
+.input-column:hover{
+    border-bottom: 1.5px solid #007bff;
+    transition : 0.8s;
+
+}
+<!--leave status progress bar start-->
+
+<!--.multi-steps > li.is-active:before, .multi-steps > li.is-active ~ li:before {-->
+
+<!--}-->
+
+ .multi-steps {
+	 display: table;
+	 table-layout: fixed;
+	 width: 100%;
+}
+ .multi-steps > li {
+	 counter-increment: stepNum;
+	 text-align: center;
+	 display: table-cell;
+	 position: relative;
+	 color: #027f00;
+	 font-weight: 600;
+}
+
+.multi-steps > li:before {
+    content: '\2713' !important;
+    display: block;
+    margin: 0 auto 4px;
+    background-color: #027f00;
+    width: 36px;
+    height: 36px;
+    line-height: 32px;
+    text-align: center;
+    font-weight: bold;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #027f00;
+    border-radius: 50%;
+    color: white;
+}
+
+.multi-steps > li.rejected:before {
+    content: '\2715' !important;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+
+ .multi-steps > li.is-active ~ li {
+	 color: #808080;
+}
+ .multi-steps > li.is-active ~ li:before {
+	 background-color: #e1e1e1;
+	 border-color: #e1e1e1;
+	 color: #808080;
+}
+
+ .progress-bar {
+	 background-color: #e1e1e1;
+	 height: 7px;
+	 overflow: hidden;
+	 position: absolute;
+	 left: 50%;
+	 bottom: calc(50% + 7px);
+	 width: 100%;
+	 z-index: -1;
+}
+ .progress-bar--success {
+	 background-color: #027f00;
+}
+ .progress-bar__bar {
+	 background-color: #e1e1e1;
+	 bottom: 0;
+	 left: 0;
+	 position: absolute;
+	 right: 0;
+	 top: 0;
+	 transition: all 500ms ease-out;
+}
+
+
+
+
+<!--leave status progress bar end-->
+
+
+</style>
+<body>
+<!-- overlay -->
+<div class="overlay w-100 vh-100 position-fixed d-none" id="sidebar-overlay"></div>
+<!-- sidebar -->
+<div class="col-md-3 col-lg-2 px-0 position-fixed h-100 bg-white shadow-sm sidebar" id="sidebar">
+    <h1 class="text-primary d-flex p-4 justify-content-center">Welcome, {{ e_name }}</h1>
+    <div class="list-group rounded-0">
+        {% for menu in menus %}
+        {% if menu[1] == request.path %}
+        <a class="list-group-item list-group-item-action border-0 d-flex align-items-center active"
+           href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% else %}
+        <a class="list-group-item list-group-item-action  border-0 d-flex align-items-center" href="{{ menu[1] }}">
+            <span class="bi bi-box"></span>
+            <span class="ml-2">{{ menu[0] }}</span>
+        </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="col-md-9 col-lg-10 ml-md-auto px-0 ms-md-auto">
+    <!-- top nav -->
+    <nav class="w-100 d-flex px-4 py-2 mb-4 shadow-sm">
+        <!-- close sidebar -->
+        <button class="btn py-0 d-lg-none" id="open-sidebar">
+            <span class="bi bi-list text-primary h3"></span>
+        </button>
+        <div class="dropdown ml-auto">
+            <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
+            <span class="dropdown-toggle" data-bs-toggle="dropdown" id="user_dropdown">
+            <span class="material-symbols-outlined" id="user_logo">
+                account_circle
+                </span>
+            </span>
+            <!-- </button> -->
+
+            <ul class="dropdown-menu dropdown-menu-dark">
+                {% if swtch_roles %}
+                <li><a class="dropdown-item" data-bs-target="#staticBackdrop" data-bs-toggle="modal" href="#"
+                       id="switch">Switch
+                    role</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+
+                {% else %}
+
+                {% endif %}
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Switch Role Modal -->
+    <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         id="staticBackdrop" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Switch the role</h1>
+                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <h3>
+                            Choose your roles:
+                        </h3>
+                    </div>
+                    <!-- For Loop Place -->
+
+                    <div class="row mt-3">
+                        {% for swtch_roles in swtch_roles %}
+                        <div class="col-md-4">
+                            <a href="{{ swtch_roles[1] }}">
+                                <button class="btn btn-primary"> {{ swtch_roles[0] }}</button>
+                            </a>
+                        </div>
+                        {% endfor %}
+                        <div class="col-md-4">
+                            <button class="btn btn-primary"> Employee</button>
+                        </div>
+                    </div>
+
+                    <!-- For Loop will close here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!-- seitchrole dialogue box end -->
+<!-- main content -->
+<main class="p-4 min-vh-100">
+
+  <div class="container-fluid">
+      <h2 class="text-center mb-5">Leave Status</h2>
+            {%with messages = get_flashed_messages()%}
+    {%if messages%}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <button aria-label="close" class="btn-close" data-bs-dismiss="alert" id="cls_btn" type="button">
+            <span aria-hidden="true"></span>
+        </button>
+        {{message}}
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+
+
+{% if leave_status %}
+  {% for leave_record in leave_status %}
+    <div class="stepContainer" id="stepContainer{{ leave_record[0] }}">
+      <h2 class="text-center mb-4 mt-5">Leave Dates:<span style="font-size:14px">From-{{ leave_record[3] }} to-{{ leave_record[4] }}</span></h2>
+      <ul class="list-unstyled multi-steps">
+{% for step_index in range(1, 4) %}
+    {% set step_name = {
+        1: 'Requested',
+        2: 'TL ' ~ ('Rejected' if leave_record[7] == 2 else 'Approved'),
+        3: 'HR ' ~ ('Rejected' if leave_record[7] == 4 else 'Approved'),
+    }[step_index] %}
+
+    {% set current_step = leave_record[7] | default(0) %}
+
+    <li id="step-{{ step_index }}" class="{{ 'is-active' if step_index > current_step else '' }} {% if step_index == 2 and leave_record[7] == 2 %}rejected{% endif %} {% if step_index == 3 and leave_record[7] == 4 %}rejected{% endif %}">
+        {{ step_name }}
+        {% if step_index < 3 %}
+            <div class="progress-bar progress-bar--success">
+                <div class="progress-bar__bar" id="progress-bar-{{ leave_record[0] }}-{{ step_index }}"></div>
+            </div>
+        {% endif %}
+    </li>
+{% endfor %}
+
+      </ul>
+
+
+<div class="text-end mt-3 cancelBtn" id="cancelBtn{{ leave_record[0] }}">
+    <form action="/delete_status" method="POST">
+        <input type="hidden" name="id" value="{{ leave_record[0] }}">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel the leave?')">Cancel Leave</button>
+    </form>
+</div>
+
+
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="text-center">Currently no status available</p>
+{% endif %}
+
+
+
+  </div>
+
+</main>
+
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+
+
+
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  {% for leave_record in leave_status %}
+    const leaveStatus{{ leave_record[0] }} = parseInt("{{ leave_record[7] }}" || 0);
+    console.log("Leave Status for ID {{ leave_record[0] }}:", leaveStatus{{ leave_record[0] }});
+
+    // Hide the cancel button if leave status is 3
+    if (leaveStatus{{ leave_record[0] }} === 3) {
+      console.log("Hiding cancel button for ID {{ leave_record[0] }}");
+      document.querySelector('#cancelBtn{{ leave_record[0] }}').style.display = 'none';
+    }
+
+    var currentDate = new Date();
+    var startDate = new Date("{{ leave_record[3] }}");
+
+    if (currentDate >= startDate) {
+      document.getElementById("stepContainer{{ leave_record[0] }}").style.display = "none";
+    } else {
+      for (let i = 1; i < 3; i++) {
+        const progressBar = document.getElementById('progress-bar-{{ leave_record[0] }}-' + i);
+
+        // Check if TL (step 2) rejected the leave request
+        if (i === 2 && leaveStatus{{ leave_record[0] }} === 2) {
+          progressBar.style.transform = 'translateX(0%)';
+          progressBar.style.transition = 'transform 2s';
+        } else if (i <= leaveStatus{{ leave_record[0] }}) {
+          progressBar.style.transform = 'translateX(100%)';
+          progressBar.style.transition = 'transform 2s';
+        } else {
+          progressBar.style.transform = 'translateX(0%)';
+          progressBar.style.transition = 'transform 2s';
+        }
+      }
+    }
+  {% endfor %}
+});
+
+
+
+
+
+
+
+</script>
+
+
+<script>
+
+  function highlightBottomBorder(inputElement) {
+        var inputColumn = inputElement.parentElement;
+        inputColumn.style.borderBottom = '2px solid #e83e8c'; /* Change the border color as needed */
+    }
+
+    function removeHighlightBottomBorder(inputElement) {
+        var inputColumn = inputElement.parentElement;
+        inputColumn.style.borderBottom = ''; /* Remove the bottom border */
+    }
+
+
+
+var switchElement = document.getElementById("switch");
+if (switchElement){
+
+$(document).ready(()=>{
+  $('#open-sidebar').click(()=>{
+      // add class active on #sidebar
+      $('#sidebar').addClass('active');
+      // show sidebar overlay
+      $('#sidebar-overlay').removeClass('d-none');
+   });
+   $('#sidebar-overlay').click(function(){
+      // add class active on #sidebar
+      $('#sidebar').removeClass('active');
+      // show sidebar overlay
+      $(this).addClass('d-none');
+   });
+});
+};
+
+</script>
+</body>
+</html>
